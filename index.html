@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>校园机会速览</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">校内信息速览</p>
+          <h1>校园机会速览</h1>
+        </div>
+        <div class="topbar-actions">
+          <button id="publishBtn" class="primary-btn">发布信息</button>
+        </div>
+      </header>
+
+      <main class="main-layout">
+        <aside class="sidebar">
+          <section class="panel filter-panel">
+            <div class="panel-header">
+              <h2>筛选</h2>
+            </div>
+            <div class="field-group">
+              <label for="searchInput">关键词</label>
+              <input id="searchInput" type="text" placeholder="输入标题 / 关键词" />
+            </div>
+
+            <div class="field-group">
+              <label>来源</label>
+              <div class="chip-group" id="sourceFilterGroup">
+                <button class="chip active" data-source="all">全部</button>
+                <button class="chip" data-source="official">官方</button>
+                <button class="chip" data-source="college">学院</button>
+                <button class="chip" data-source="student">学生发布</button>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label>状态</label>
+              <div class="chip-group" id="statusFilterGroup">
+                <button class="chip active" data-status="all">全部</button>
+                <button class="chip" data-status="active">报名中</button>
+                <button class="chip" data-status="urgent">即将截止</button>
+                <button class="chip" data-status="review">待确认</button>
+              </div>
+            </div>
+
+            <div class="checkbox-row">
+              <input id="freshmanOnly" type="checkbox" />
+              <label for="freshmanOnly">只看适合新生</label>
+            </div>
+
+            <div class="checkbox-row">
+              <input id="lowRiskOnly" type="checkbox" />
+              <label for="lowRiskOnly">只看低风险内容</label>
+            </div>
+          </section>
+
+          <section class="panel summary-panel">
+            <div class="panel-header">
+              <h2>今日速览</h2>
+            </div>
+            <div id="todaySummary" class="mini-summary"></div>
+          </section>
+        </aside>
+
+        <section class="content-panel">
+          <div class="content-topbar">
+            <div>
+              <p class="eyebrow">信息优先级</p>
+              <h2>按“可信度 + 新生适配度”排序</h2>
+            </div>
+            <div class="sort-select-wrap">
+              <label for="sortSelect">排序</label>
+              <select id="sortSelect">
+                <option value="priority">推荐优先级</option>
+                <option value="time">时间最近</option>
+                <option value="trust">可信度</option>
+              </select>
+            </div>
+          </div>
+
+          <section id="recommendSection" class="recommend-section"></section>
+          <section id="activityList" class="activity-list"></section>
+        </section>
+      </main>
+    </div>
+
+    <div id="detailModal" class="modal hidden" aria-hidden="true">
+      <div class="modal-backdrop" data-close="true"></div>
+      <div class="modal-card">
+        <button class="close-btn" id="closeModalBtn">×</button>
+        <div id="detailContent"></div>
+      </div>
+    </div>
+
+    <div id="publishModal" class="modal hidden" aria-hidden="true">
+      <div class="modal-backdrop" data-close="true"></div>
+      <div class="modal-card publish-card">
+        <button class="close-btn" id="closePublishBtn">×</button>
+        <h3>发布校园活动 / 招募信息</h3>
+        <form id="publishForm">
+          <div class="field-grid two-col">
+            <div class="field-group">
+              <label for="newTitle">标题</label>
+              <input id="newTitle" type="text" required />
+            </div>
+            <div class="field-group">
+              <label for="newSource">发布来源</label>
+              <select id="newSource">
+                <option value="学生发布">学生发布</option>
+                <option value="学院发布">学院发布</option>
+                <option value="社团发布">社团发布</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-grid two-col">
+            <div class="field-group">
+              <label for="newTime">时间</label>
+              <input id="newTime" type="text" placeholder="如：9月20日 16:00" required />
+            </div>
+            <div class="field-group">
+              <label for="newLocation">地点</label>
+              <input id="newLocation" type="text" placeholder="可填待定" />
+            </div>
+          </div>
+
+          <div class="field-grid two-col">
+            <div class="field-group">
+              <label for="newAudience">适用对象</label>
+              <input id="newAudience" type="text" value="全校学生" />
+            </div>
+            <div class="field-group">
+              <label for="newDeadline">截止时间</label>
+              <input id="newDeadline" type="text" placeholder="如：9月22日 18:00" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="newDescription">详细说明</label>
+            <textarea id="newDescription" rows="4" required></textarea>
+          </div>
+
+          <div class="field-group">
+            <label for="newContact">联系方式</label>
+            <input id="newContact" type="text" placeholder="QQ / 微信 / 备注" />
+          </div>
+
+          <div class="field-group">
+            <label for="newTags">标签（用空格或逗号分隔）</label>
+            <input id="newTags" type="text" placeholder="例如：零基础 招募 设计" />
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="secondary-btn" id="cancelPublishBtn">取消</button>
+            <button type="submit" class="primary-btn">保存并发布</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
