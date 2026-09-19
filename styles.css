@@ -563,6 +563,86 @@ input:focus, select:focus, textarea:focus {
   background: rgba(250,251,255,0.8);
 }
 
+.timeline-panel {
+  margin-top: 20px;
+}
+
+.timeline-list {
+  display: grid;
+  gap: 12px;
+}
+
+.timeline-item {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  background: var(--panel-soft);
+  border: 1px solid rgba(68,104,255,0.1);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+
+.timeline-date {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  text-align: center;
+  padding: 8px 4px;
+}
+
+.timeline-date strong {
+  display: block;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--primary);
+}
+
+.timeline-date span {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.timeline-copy h4 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.timeline-copy p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.timeline-risk {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  padding: 6px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.timeline-risk.safe {
+  background: rgba(44,167,122,0.12);
+  color: var(--success);
+}
+
+.timeline-risk.critical {
+  background: rgba(230,95,92,0.1);
+  color: var(--danger);
+}
+
+.empty-timeline {
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 10px 6px;
+}
+
 .modal {
   position: fixed;
   inset: 0;
@@ -737,5 +817,14 @@ input:focus, select:focus, textarea:focus {
 
   .stat-card {
     flex: 1 1 100%;
+  }
+
+  .timeline-item {
+    grid-template-columns: 50px 1fr;
+  }
+
+  .timeline-risk {
+    grid-column: 2;
+    justify-self: start;
   }
 }

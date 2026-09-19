@@ -116,6 +116,29 @@ const baseActivities = [
     lowRisk: true,
     image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80',
     createdAt: '2026-09-15T09:00:00Z'
+  },
+  {
+    id: 'A06',
+    title: '暑期科研助理招募计划',
+    source: '学院',
+    sourceType: 'college',
+    audience: '大一至大三',
+    location: '科研楼 301',
+    timeText: '9月25日 09:30',
+    deadline: '2026-09-27 18:00',
+    startAt: '2026-09-25T09:30:00',
+    fit: 90,
+    trust: 86,
+    risk: '低风险',
+    state: '报名中',
+    stateKey: 'active',
+    need: '需提交简历并参与导师面试，适合对科研和数据分析感兴趣的学生',
+    details: '面向感兴趣的学生开放科研助理岗位，培养研究方法、实验设计以及论文阅读能力。',
+    tags: ['科研', '助理', '项目'],
+    freshmanOnly: false,
+    lowRisk: true,
+    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=900&q=80',
+    createdAt: '2026-09-16T13:00:00Z'
   }
 ];
 
@@ -149,6 +172,7 @@ function cacheElements() {
   els.todaySummary = document.getElementById('todaySummary');
   els.recommendSection = document.getElementById('recommendSection');
   els.activityList = document.getElementById('activityList');
+  els.timelineList = document.getElementById('timelineList');
   els.detailModal = document.getElementById('detailModal');
   els.detailContent = document.getElementById('detailContent');
   els.closeModalBtn = document.getElementById('closeModalBtn');
@@ -351,6 +375,7 @@ function render() {
   renderSummary(activities);
   renderRecommendations(activities);
   renderList(activities);
+  renderTimeline(activities);
   renderFavorites();
   renderFilterSummary(activities);
 }
@@ -400,7 +425,7 @@ function renderRecommendations(activities) {
   const topItems = [...activities].slice(0, 3);
 
   if (!topItems.length) {
-    els.recommendSection.innerHTML = '<div class="empty-state">暂无符���条件的推荐内容，试试重置筛选。</div>';
+    els.recommendSection.innerHTML = '<div class="empty-state">暂无符合条件的推荐内容，试试重置筛选。</div>';
     return;
   }
 
@@ -475,6 +500,39 @@ function renderList(activities) {
   }).join('');
 }
 
+function renderTimeline(activities) {
+  if (!els.timelineList) return;
+
+  const upcoming = [...activities]
+    .filter((activity) => activity.startAt)
+    .sort((a, b) => new Date(a.startAt) - new Date(b.startAt))
+    .slice(0, 5);
+
+  if (!upcoming.length) {
+    els.timelineList.innerHTML = '<div class="empty-timeline">暂无近期安排</div>';
+    return;
+  }
+
+  els.timelineList.innerHTML = upcoming.map((activity) => {
+    const date = new Date(activity.startAt);
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `
+      <div class="timeline-item">
+        <div class="timeline-date">
+          <strong>${day}</strong>
+          <span>${month}月</span>
+        </div>
+        <div class="timeline-copy">
+          <h4>${safe(activity.title)}</h4>
+          <p>${safe(activity.location)} · ${safe(activity.timeText)}</p>
+        </div>
+        <span class="timeline-risk ${activity.lowRisk ? 'safe' : 'critical'}">${safe(activity.risk)}</span>
+      </div>
+    `;
+  }).join('');
+}
+
 function renderFavorites() {
   if (!els.favoritesList) return;
 
@@ -529,7 +587,7 @@ function openDetailModal(id) {
     <div class="detail-grid">
       <div class="detail-block"><h4>时间</h4><p>${safe(activity.timeText)}</p></div>
       <div class="detail-block"><h4>地点</h4><p>${safe(activity.location)}</p></div>
-      <div class="detail-block"><h4>适用对���</h4><p>${safe(activity.audience)}</p></div>
+      <div class="detail-block"><h4>适用对象</h4><p>${safe(activity.audience)}</p></div>
       <div class="detail-block"><h4>截止时间</h4><p>${safe(activity.deadline)}</p></div>
     </div>
     <p>${safe(activity.details)}</p>
@@ -650,17 +708,3 @@ window.campusOpportunityHub = {
   state,
   toggleFavorite
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
