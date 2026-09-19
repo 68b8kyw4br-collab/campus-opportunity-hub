@@ -3,15 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="校园机会速览：整合校内活动、招募、比赛和志愿机会，帮助学生更快筛选适合自己的信息。"
-    />
+    <meta name="description" content="校园机会速览：整合校内活动、招募、比赛和志愿机会，帮助学生更快筛选适合自己的信息。" />
     <title>校园机会速览</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
+    <style>
+      .hero-visual { position: relative; flex: 0 0 min(42%, 470px); min-height: 190px; }
+      .hero-visual img { position: absolute; object-fit: cover; border: 5px solid rgba(255,255,255,.82); box-shadow: 0 18px 34px rgba(33,54,120,.16); transition: transform .25s ease; }
+      .hero-visual img:hover { transform: translateY(-5px) rotate(0deg); z-index: 4; }
+      .hero-image-main { width: 62%; height: 170px; right: 4%; top: 8px; border-radius: 26px 26px 26px 8px; transform: rotate(2deg); }
+      .hero-image-small { width: 40%; height: 112px; left: 3%; bottom: 8px; border-radius: 18px 8px 18px 18px; transform: rotate(-6deg); }
+      .hero-image-detail { width: 30%; height: 86px; right: 0; bottom: 0; border-radius: 14px; transform: rotate(5deg); }
+      .image-credit { position: absolute; right: 12px; bottom: -18px; font-size: 10px; color: var(--muted); opacity: .75; }
+      .favorites-panel { margin-top: 20px; }
+      .favorites-list { display: grid; gap: 10px; }
+      .favorite-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #f8faff; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+      .favorite-item span { font-size: 13px; line-height: 1.4; }
+      .favorite-item button { background: transparent; border: none; color: var(--primary); font-weight: 700; padding: 0; }
+      .empty-favorites { color: var(--muted); font-size: 13px; line-height: 1.6; margin: 0; }
+      @media (max-width: 980px) { .hero-visual { width: 100%; flex-basis: auto; min-height: 180px; } }
+      @media (max-width: 560px) { .hero-visual { min-height: 145px; } .hero-image-main { height: 130px; } .hero-image-small { height: 88px; } .hero-image-detail { height: 68px; } }
+    </style>
   </head>
   <body>
     <div class="app-shell">
@@ -31,89 +45,40 @@
           <h2>发现适合你的校园机会</h2>
           <p>聚焦活动、比赛、科研和公益机会，快速判断是否值得报名。</p>
         </div>
+        <div class="hero-visual" aria-label="校园学习与活动图片">
+          <img class="hero-image-main" src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=900&q=85" alt="学生在校园中交流学习" />
+          <img class="hero-image-small" src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=700&q=85" alt="团队协作完成项目" />
+          <img class="hero-image-detail" src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=85" alt="校园团队讨论活动" />
+          <span class="image-credit">校园机会 · 学习 · 协作</span>
+        </div>
         <div class="hero-stats" id="heroStats">
-          <div class="stat-card">
-            <span class="stat-label">机会总数</span>
-            <strong id="heroTotal">0</strong>
-          </div>
-          <div class="stat-card">
-            <span class="stat-label">新生适配</span>
-            <strong id="heroFresh">0</strong>
-          </div>
-          <div class="stat-card">
-            <span class="stat-label">低风险</span>
-            <strong id="heroLowRisk">0</strong>
-          </div>
+          <div class="stat-card"><span class="stat-label">机会总数</span><strong id="heroTotal">0</strong></div>
+          <div class="stat-card"><span class="stat-label">新生适配</span><strong id="heroFresh">0</strong></div>
+          <div class="stat-card"><span class="stat-label">低风险</span><strong id="heroLowRisk">0</strong></div>
         </div>
       </section>
 
       <main class="main-layout">
         <aside class="sidebar">
           <section class="panel filter-panel">
-            <div class="panel-header">
-              <h2>筛选</h2>
-              <button id="resetFiltersBtn" class="text-btn" type="button">重置</button>
-            </div>
-            <div class="field-group">
-              <label for="searchInput">关键词</label>
-              <input id="searchInput" type="text" placeholder="输入标题 / 关键词" aria-label="按关键词筛选活动" />
-            </div>
-
-            <div class="field-group">
-              <label>来源</label>
-              <div class="chip-group" id="sourceFilterGroup">
-                <button class="chip active" data-source="all" type="button">全部</button>
-                <button class="chip" data-source="official" type="button">官方</button>
-                <button class="chip" data-source="college" type="button">学院</button>
-                <button class="chip" data-source="student" type="button">学生发布</button>
-              </div>
-            </div>
-
-            <div class="field-group">
-              <label>状态</label>
-              <div class="chip-group" id="statusFilterGroup">
-                <button class="chip active" data-status="all" type="button">全部</button>
-                <button class="chip" data-status="active" type="button">报名中</button>
-                <button class="chip" data-status="urgent" type="button">即将截止</button>
-                <button class="chip" data-status="review" type="button">待确认</button>
-              </div>
-            </div>
-
-            <div class="checkbox-row">
-              <input id="freshmanOnly" type="checkbox" />
-              <label for="freshmanOnly">只看适合新生</label>
-            </div>
-
-            <div class="checkbox-row">
-              <input id="lowRiskOnly" type="checkbox" />
-              <label for="lowRiskOnly">只看低风险内容</label>
-            </div>
+            <div class="panel-header"><h2>筛选</h2><button id="resetFiltersBtn" class="text-btn" type="button">重置</button></div>
+            <div class="field-group"><label for="searchInput">关键词</label><input id="searchInput" type="text" placeholder="输入标题 / 关键词" aria-label="按关键词筛选活动" /></div>
+            <div class="field-group"><label>来源</label><div class="chip-group" id="sourceFilterGroup"><button class="chip active" data-source="all" type="button">全部</button><button class="chip" data-source="official" type="button">官方</button><button class="chip" data-source="college" type="button">学院</button><button class="chip" data-source="student" type="button">学生发布</button></div></div>
+            <div class="field-group"><label>状态</label><div class="chip-group" id="statusFilterGroup"><button class="chip active" data-status="all" type="button">全部</button><button class="chip" data-status="active" type="button">报名中</button><button class="chip" data-status="urgent" type="button">即将截止</button><button class="chip" data-status="review" type="button">待确认</button></div></div>
+            <div class="checkbox-row"><input id="freshmanOnly" type="checkbox" /><label for="freshmanOnly">只看适合新生</label></div>
+            <div class="checkbox-row"><input id="lowRiskOnly" type="checkbox" /><label for="lowRiskOnly">只看低风险内容</label></div>
           </section>
 
-          <section class="panel summary-panel">
-            <div class="panel-header">
-              <h2>今日速览</h2>
-            </div>
-            <div id="todaySummary" class="mini-summary"></div>
+          <section class="panel summary-panel"><div class="panel-header"><h2>今日速览</h2></div><div id="todaySummary" class="mini-summary"></div></section>
+
+          <section class="panel favorites-panel">
+            <div class="panel-header compact-header"><h2>收藏夹</h2><button id="clearFavoritesBtn" class="text-btn" type="button">清空</button></div>
+            <div id="favoritesList" class="favorites-list"></div>
           </section>
         </aside>
 
         <section class="content-panel">
-          <div class="content-topbar">
-            <div>
-              <p class="eyebrow">信息优先级</p>
-              <h2>按“可信度 + 新生适配度”排序</h2>
-            </div>
-            <div class="sort-select-wrap">
-              <label for="sortSelect">排序</label>
-              <select id="sortSelect" aria-label="选择活动排序方式">
-                <option value="priority">推荐优先级</option>
-                <option value="time">时间最近</option>
-                <option value="trust">可信度</option>
-              </select>
-            </div>
-          </div>
-
+          <div class="content-topbar"><div><p class="eyebrow">信息优先级</p><h2>按“可信度 + 新生适配度”排序</h2></div><div class="sort-select-wrap"><label for="sortSelect">排序</label><select id="sortSelect" aria-label="选择活动排序方式"><option value="priority">推荐优先级</option><option value="time">时间最近</option><option value="trust">可信度</option></select></div></div>
           <div id="filterSummary" class="filter-summary" aria-live="polite"></div>
           <section id="recommendSection" class="recommend-section"></section>
           <section id="activityList" class="activity-list"></section>
@@ -121,13 +86,7 @@
       </main>
     </div>
 
-    <div id="detailModal" class="modal hidden" aria-hidden="true">
-      <div class="modal-backdrop" data-close="true"></div>
-      <div class="modal-card">
-        <button class="close-btn" id="closeModalBtn" type="button" aria-label="关闭详情弹窗">×</button>
-        <div id="detailContent"></div>
-      </div>
-    </div>
+    <div id="detailModal" class="modal hidden" aria-hidden="true"><div class="modal-backdrop" data-close="true"></div><div class="modal-card"><button class="close-btn" id="closeModalBtn" type="button" aria-label="关闭详情弹窗">×</button><div id="detailContent"></div></div></div>
 
     <div id="publishModal" class="modal hidden" aria-hidden="true">
       <div class="modal-backdrop" data-close="true"></div>
@@ -135,66 +94,16 @@
         <button class="close-btn" id="closePublishBtn" type="button" aria-label="关闭发布弹窗">×</button>
         <h3>发布校园活动 / 招募信息</h3>
         <form id="publishForm">
-          <div class="field-grid two-col">
-            <div class="field-group">
-              <label for="newTitle">标题</label>
-              <input id="newTitle" type="text" required />
-            </div>
-            <div class="field-group">
-              <label for="newSource">发布来源</label>
-              <select id="newSource">
-                <option value="学生发布">学生发布</option>
-                <option value="学院发布">学院发布</option>
-                <option value="社团发布">社团发布</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="field-grid two-col">
-            <div class="field-group">
-              <label for="newTime">时间</label>
-              <input id="newTime" type="text" placeholder="如：9月20日 16:00" required />
-            </div>
-            <div class="field-group">
-              <label for="newLocation">地点</label>
-              <input id="newLocation" type="text" placeholder="可填待定" />
-            </div>
-          </div>
-
-          <div class="field-grid two-col">
-            <div class="field-group">
-              <label for="newAudience">适用对象</label>
-              <input id="newAudience" type="text" value="全校学生" />
-            </div>
-            <div class="field-group">
-              <label for="newDeadline">截止时间</label>
-              <input id="newDeadline" type="text" placeholder="如：9月22日 18:00" />
-            </div>
-          </div>
-
-          <div class="field-group">
-            <label for="newDescription">详细说明</label>
-            <textarea id="newDescription" rows="4" required></textarea>
-          </div>
-
-          <div class="field-group">
-            <label for="newContact">联系方式</label>
-            <input id="newContact" type="text" placeholder="QQ / 微信 / 备注" />
-          </div>
-
-          <div class="field-group">
-            <label for="newTags">标签（用空格或逗号分隔）</label>
-            <input id="newTags" type="text" placeholder="例如：零基础 招募 设计" />
-          </div>
-
-          <div class="form-actions">
-            <button type="button" class="secondary-btn" id="cancelPublishBtn">取消</button>
-            <button type="submit" class="primary-btn">保存并发布</button>
-          </div>
+          <div class="field-grid two-col"><div class="field-group"><label for="newTitle">标题</label><input id="newTitle" type="text" required /></div><div class="field-group"><label for="newSource">发布来源</label><select id="newSource"><option value="学生发布">学生发布</option><option value="学院发布">学院发布</option><option value="社团发布">社团发布</option></select></div></div>
+          <div class="field-grid two-col"><div class="field-group"><label for="newTime">时间</label><input id="newTime" type="text" placeholder="如：9月20日 16:00" required /></div><div class="field-group"><label for="newLocation">地点</label><input id="newLocation" type="text" placeholder="可填待定" /></div></div>
+          <div class="field-grid two-col"><div class="field-group"><label for="newAudience">适用对象</label><input id="newAudience" type="text" value="全校学生" /></div><div class="field-group"><label for="newDeadline">截止时间</label><input id="newDeadline" type="text" placeholder="如：9月22日 18:00" /></div></div>
+          <div class="field-group"><label for="newDescription">详细说明</label><textarea id="newDescription" rows="4" required></textarea></div>
+          <div class="field-group"><label for="newContact">联系方式</label><input id="newContact" type="text" placeholder="QQ / 微信 / 备注" /></div>
+          <div class="field-group"><label for="newTags">标签（用空格或逗号分隔）</label><input id="newTags" type="text" placeholder="例如：零基础 招募 设计" /></div>
+          <div class="form-actions"><button type="button" class="secondary-btn" id="cancelPublishBtn">取消</button><button type="submit" class="primary-btn">保存并发布</button></div>
         </form>
       </div>
     </div>
-
     <script src="app.js"></script>
   </body>
 </html>
