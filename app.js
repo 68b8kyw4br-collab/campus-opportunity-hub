@@ -1,4 +1,5 @@
 const STORAGE_KEY = 'campus-opportunity-hub-events';
+const FAVORITES_KEY = 'campus-opportunity-hub-favorites';
 
 const baseActivities = [
   { id: 'A01', title: '蓝桥杯程序设计校内训练营', source: '校内公告', sourceType: 'official', audience: '全校学生', location: '线上/校内', timeText: '报名截止：9月24日22:00；每周六19:00训练', deadline: '2026-09-24 22:00', startAt: '2026-09-20 19:00', tags: ['编程','零基础','训练营'], fit: 92, trust: 94, risk: '低', state: '报名中', need: '报名', detail: '原计划于9月20日起每周六19:00训练，适合零基础学生参加。材料说明给出明确时间和对象，属于高价值官方活动。' },
@@ -7,12 +8,12 @@ const baseActivities = [
   { id: 'A04', title: '数学建模竞赛经验分享会', source: '校内直播', sourceType: 'official', audience: '不限专业', location: '线上直播', timeText: '直播已结束，预计9月20日上传回放', deadline: '2026-09-20 00:00', startAt: '2026-09-18 19:30', tags: ['数学建模','直播','回放'], fit: 72, trust: 84, risk: '低', state: '已结束', need: '查看回放', detail: '活动已结束，官方说明预计上传回放，因此适合在平台上补充回放链接，适合后续查看。' },
   { id: 'A05', title: '校园公益志愿服务活动', source: '校内公益', sourceType: 'official', audience: '全校学生', location: '校内/社区', timeText: '9月27日8:30—17:00，9月20日12:00报名截止', deadline: '2026-09-20 12:00', startAt: '2026-09-27 08:30', tags: ['志愿服务','公益','服务时长'], fit: 89, trust: 90, risk: '低', state: '报名中', need: '提前签到', detail: '预计服务8小时，需要提前到场签到。适合有长期参与意愿的学生，信息较完整。' },
   { id: 'A06', title: 'Web开发零基础学习小组', source: '校内学习小组', sourceType: 'official', audience: '零基础学生', location: '校内', timeText: '9月23日起每周三19:30，共6周，限30人', deadline: '2026-09-23 19:30', startAt: '2026-09-23 19:30', tags: ['Web开发','零基础','学习小组'], fit: 94, trust: 86, risk: '中', state: '报名中', need: '按需预约/满员即止', detail: '面向零基础学生、人数限制为30人。虽有清晰说明，但报名时间未明确，需及时关注。' },
-  { id: 'A07', title: 'AI创新应用挑战赛', source: '校内赛事', sourceType: 'official', audience: '2—4人组队', location: '校内申报', timeText: '9月21日18:00前完成校内意向登记；10月20日提交作品', deadline: '2026-09-21 18:00', startAt: '2026-09-19 00:00', tags: ['AI','比赛','组队'], fit: 88, trust: 91, risk: '中', state: '报名中', need: '登记意向并组队', detail: '项目说明强调意向登记不等同于最终作品提交，适合提前组队但需注意阶段性目标。' },
+  { id: 'A07', title: 'AI创新应用挑战赛', source: '校内赛事', sourceType: 'official', audience: '2—4人组队', location: '校内申报', timeText: '9月21日18:00前完成校内意向登记；10月20日提交作品', deadline: '2026-09-21 18:00', startAt: '2026-09-19 00:00', tags: ['AI','比赛','组队'], fit: 88, trust: 91, risk: '中', state: '报名中', need: '登记���向并组队', detail: '项目说明强调意向登记不等同于最终作品提交，适合提前组队但需注意阶段性目标。' },
   { id: 'A08', title: '校园软件项目组招募', source: '校内项目组', sourceType: 'official', audience: '大一、大二学生', location: '线上/校内', timeText: '长期招募，满员即止，预计每周5小时', deadline: '长期招募', startAt: '2026-09-19 00:00', tags: ['软件开发','Git','长期'], fit: 86, trust: 87, risk: '低', state: '持续招募', need: '了解Git基础', detail: '适合有项目参与意愿的大一大二学生，长期招募且需了解Git基础。建议优先判断项目真实需求与成员配置。' },
   { id: 'A09', title: '程序设计训练营补充通知', source: '校内公告', sourceType: 'official', audience: '已报名同学', location: '实验楼A402', timeText: '首次训练改为9月21日19:30；报名截止时间不变', deadline: '2026-09-24 22:00', startAt: '2026-09-21 19:30', tags: ['编程','更新通知','场地调整'], fit: 84, trust: 96, risk: '低', state: '已更新', need: '留意更新信息', detail: '该信息属于重要更新通知，已报名同学无需重复提交。对新生而言，需留意原始通知与更新版本是否有差异。' },
   { id: 'A10', title: '前端开发经验交流会', source: '校内活动', sourceType: 'official', audience: '全校学生', location: 'A201/线上直播', timeText: '9月19日15:00—16:30', deadline: '2026-09-19 16:30', startAt: '2026-09-19 15:00', tags: ['前端','经验交流','直播'], fit: 87, trust: 91, risk: '低', state: '进行中', need: '无需报名', detail: '线下与线上同步进行，适合对前端方向感兴趣的学生。活动经过明确说明，无需报名。' },
   { id: 'A11', title: '大学生科研入门分享会', source: '校内活动', sourceType: 'official', audience: '全校学生', location: '校内', timeText: '9月21日19:00—20:30', deadline: '2026-09-21 20:30', startAt: '2026-09-21 19:00', tags: ['科研','导师','文献检索'], fit: 80, trust: 90, risk: '低', state: '报名中', need: '关注时间', detail: '活动介绍论文检索、科研项目和导师联系方法，适合对科研感兴趣但尚无经验的学生。' },
-  { id: 'A12', title: '全国高校计算机能力挑战赛', source: '全国赛事', sourceType: 'official', audience: '本科生', location: '线上/校内', timeText: '10月5日23:59报名截止，个人参赛', deadline: '2026-10-05 23:59', startAt: '2026-09-19 00:00', tags: ['比赛','能力挑战','计算机'], fit: 71, trust: 89, risk: '中', state: '报名中', need: '关注费用及规则', detail: '个人参赛，报名有明确截止日期，但费用信息未提供，需进一步确认是否需要自费。' },
+  { id: 'A12', title: '全国高校计算机能力挑战赛', source: '全国赛事', sourceType: 'official', audience: '本科生', location: '线上/校内', timeText: '10月5日23:59报名截止，个人参赛', deadline: '2026-10-05 23:59', startAt: '2026-09-19 00:00', tags: ['比赛','能力挑战','计算机'], fit: 71, trust: 89, risk: '中', state: '报名中', need: '关注费用及规则', detail: '个人参赛，报名有明确截止��期，但费用信息未提供，需进一步确认是否需要自费。' },
   { id: 'A13', title: '科研助理招募', source: '科研组', sourceType: 'college', audience: '大二及以上学生', location: '校内实验室', timeText: '9月21日截止报名，每周预计6小时', deadline: '2026-09-21 00:00', startAt: '2026-09-19 00:00', tags: ['科研','助理','数据整理'], fit: 70, trust: 82, risk: '中', state: '报名中', need: '校对能力与年级条件', detail: '仅限大二及以上学生，适合有科研意愿但未明确项目背景及指导老师的学生。需要注意年级门槛。' },
   { id: 'A14', title: 'Git与GitHub零基础工作坊', source: '学院活动', sourceType: 'college', audience: '大一新生', location: '校内', timeText: '9月21日19:00—20:30，限40人，需提前预约', deadline: '2026-09-21 19:00', startAt: '2026-09-21 19:00', tags: ['Git','GitHub','新生'], fit: 96, trust: 88, risk: '中', state: '报名中', need: '预约并等待审核', detail: '针对大一新生，需提前预约，且“报名表不代表最终录取”说明有明确审核机制，适合有主动学习动机的学生。' },
   { id: 'A15', title: 'AI应用创意挑战', source: '校内赛事', sourceType: 'official', audience: '个人或团队', location: '线上/校内', timeText: '9月23日23:59前提交创意方案；9月30日前提交最终作品', deadline: '2026-09-23 23:59', startAt: '2026-09-19 00:00', tags: ['AI','创意','展示'], fit: 85, trust: 90, risk: '低', state: '报名中', need: '提交方案/可再组队', detail: '允许个人或团队参加，进入展示环节后仍可再组队，适合想尝试AI项目但还未明确方向的学生。' },
@@ -53,9 +54,33 @@ const els = {
   todaySummary: document.getElementById('todaySummary'),
   freshmanOnly: document.getElementById('freshmanOnly'),
   lowRiskOnly: document.getElementById('lowRiskOnly'),
+  favoritesList: document.getElementById('favoritesList'),
+  clearFavoritesBtn: document.getElementById('clearFavoritesBtn'),
 };
 
 const localEvents = () => JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+
+function getFavorites() {
+  return JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]');
+}
+
+function setFavorites(items) {
+  localStorage.setItem(FAVORITES_KEY, JSON.stringify(items));
+}
+
+function toggleFavorite(id) {
+  const favorites = getFavorites();
+  const next = favorites.includes(id) ? favorites.filter((value) => value !== id) : [...favorites, id];
+  setFavorites(next);
+  renderFavorites();
+  renderActivities();
+}
+
+function clearFavorites() {
+  setFavorites([]);
+  renderFavorites();
+  renderActivities();
+}
 
 function persistEvents(items) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
@@ -100,7 +125,6 @@ function parseDate(value) {
     .replace(/年|月|日/g, '-')
     .replace(/时/g, ':')
     .replace(/分/g, '')
-    .replace(/:/g, ':')
     .replace(/\s+/g, ' ')
     .trim();
 
@@ -172,6 +196,7 @@ function createBadge(item) {
 
 function buildActivityCard(item) {
   const deadlineText = item.deadline && item.deadline !== '长期招募' ? `截止：${item.deadline}` : '长期开放';
+  const favoriteActive = getFavorites().includes(item.id) ? 'active' : '';
 
   return `
     <article class="activity-card" data-id="${item.id}">
@@ -197,7 +222,10 @@ function buildActivityCard(item) {
 
       <div class="card-footer">
         <span class="badge ${item.fit >= 80 ? 'safe' : 'student'}">适配度 ${item.fit}</span>
-        <button class="link-btn" type="button" data-open-detail="${item.id}">查看详情</button>
+        <div class="action-bar">
+          <button class="favorite-btn ${favoriteActive}" type="button" data-favorite-toggle="${item.id}">${getFavorites().includes(item.id) ? '已收藏' : '收藏'}</button>
+          <button class="link-btn" type="button" data-open-detail="${item.id}">查看详情</button>
+        </div>
       </div>
     </article>
   `;
@@ -250,10 +278,29 @@ function renderSummary() {
   `;
 }
 
+function renderFavorites() {
+  const favorites = getFavorites();
+  const allEvents = mergeEvents();
+  const selected = allEvents.filter((item) => favorites.includes(item.id));
+
+  if (!selected.length) {
+    els.favoritesList.innerHTML = '<p class="empty-favorites">暂无收藏，点击卡片上的“收藏”即可加入待办。</p>';
+    return;
+  }
+
+  els.favoritesList.innerHTML = selected.slice(0, 5).map((item) => `
+    <div class="favorite-item">
+      <span>${item.title}</span>
+      <button type="button" data-open-detail="${item.id}">查看</button>
+    </div>
+  `).join('');
+}
+
 function renderActivities() {
   const filtered = getFilteredActivities();
   renderRecommend();
   renderSummary();
+  renderFavorites();
 
   if (!filtered.length) {
     els.activityList.innerHTML = '<div class="empty-state">暂无符合筛选条件的内容，试试调整关键词或筛选条件。</div>';
@@ -264,6 +311,7 @@ function renderActivities() {
 }
 
 function renderDetail(item) {
+  const favoriteActive = getFavorites().includes(item.id) ? 'active' : '';
   const riskBox = item.risk === '高'
     ? '<div class="warning-box">此信息较为不完整或风险较高，建议先确认主办方、时间和场地，再决定是否报名。</div>'
     : item.risk === '中'
@@ -306,6 +354,10 @@ function renderDetail(item) {
       <div class="detail-block">
         <h4>信息评分</h4>
         <p>适配度：${item.fit} / 100，可信度：${item.trust} / 100，风险：${item.risk}</p>
+      </div>
+
+      <div class="action-bar">
+        <button class="favorite-btn ${favoriteActive}" type="button" data-favorite-toggle="${item.id}">${getFavorites().includes(item.id) ? '已收藏' : '收藏此活动'}</button>
       </div>
     </div>
   `;
@@ -357,11 +409,18 @@ function bindEvents() {
     renderActivities();
   });
 
+  els.clearFavoritesBtn.addEventListener('click', clearFavorites);
+
   document.addEventListener('click', (e) => {
     const detailButton = e.target.closest('[data-open-detail]');
     if (detailButton) {
       const item = mergeEvents().find((entry) => entry.id === detailButton.dataset.openDetail);
       if (item) renderDetail(item);
+    }
+
+    const favoriteToggle = e.target.closest('[data-favorite-toggle]');
+    if (favoriteToggle) {
+      toggleFavorite(favoriteToggle.dataset.favoriteToggle);
     }
 
     if (e.target.matches('[data-close="true"]')) {
@@ -397,7 +456,7 @@ function bindEvents() {
       id: `U${Date.now()}`,
       title,
       source: source,
-      sourceType: source === '学院发布' ? 'college' : source === '社团发布' ? 'official' : 'student',
+      sourceType: source === '学院发��' ? 'college' : source === '社团发布' ? 'official' : 'student',
       audience,
       location,
       timeText,
